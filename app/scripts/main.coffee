@@ -13,10 +13,18 @@ for tote in d3.range(1,7)
 
 
 width = 1000/(stacks.length)
+scoreScale = d3.scale.ordinal().domain(stacks.map((el) -> el.score).sort((a,b) -> a-b)).rangePoints([0,900])
+indexScale = d3.scale.linear().domain([0, stacks.length]).range([0,900])
 
 stacks = d3.select("svg").selectAll(".stack").data(stacks)
-  .enter().append("g").attr("score", (d) -> d.score).attr("transform", (d,i) -> "translate(#{(i+1) * width},300)")
+  .enter().append("g").attr("score", (d) -> d.score).attr("transform", (d,i) -> "translate(#{indexScale(i)},300)")
 stacks.selectAll(".tote").data((d) -> d3.range(0,d.totes)).enter().append("use").attr("y", (d,i) -> (i+1)*-toteHeight).attr("xlink:href", "#tote")
 stacks.selectAll(".litter").data((d) -> d3.range(0,d.litter)).enter().append("use").attr("y", (d,i) -> (d3.select(this.parentElement).datum().totes + 1) * -toteHeight - binHeight*.55).attr("xlink:href", "#litter")
 stacks.selectAll(".bin").data((d) -> d3.range(0,d.bins)).enter().append("use").attr("y", (d,i) -> (d3.select(this.parentElement).datum().totes + 1) * -toteHeight ).attr("xlink:href", "#bin")
 stacks.append("text").text((d) -> d.score).attr("x", width/2)
+
+window.orderByScore = ->
+  d3.selectAll("g").transition().duration(1000).attr("transform", (d) -> "translate("+(scoreScale(d.score)+45*d.bins + 45*d.litter)+",300)")
+
+window.orderByIndex = ->
+  d3.selectAll("g").transition().duration(1000).attr("transform", (d,i) -> "translate(#{indexScale(i)},300)")
