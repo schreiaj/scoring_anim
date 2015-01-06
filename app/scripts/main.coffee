@@ -1,7 +1,7 @@
 binHeight = 70
 toteHeight = 30
 litterHeight = 30
-
+animDelay = 60
 
 window.stacks = stacks = [
 ]
@@ -24,7 +24,7 @@ stacks.selectAll(".bin").data((d) -> d3.range(0,d.bins)).enter().append("use").a
 stacks.append("text").text((d) -> d.score).attr("x", width/2)
 
 window.orderByScore = ->
-  d3.selectAll("g").transition().duration(1000).attr("transform", (d) -> "translate("+(scoreScale(d.score)+45*d.bins + 45*d.litter)+",300)")
+  d3.selectAll("g").transition().duration(animDelay).delay((d,i) -> return animDelay*i).attr("transform", (d) -> "translate("+(scoreScale(d.score)+45*d.bins + 45*d.litter)+",300)")
 
 window.orderByIndex = ->
-  d3.selectAll("g").transition().duration(1000).attr("transform", (d,i) -> "translate(#{indexScale(i)},300)")
+  d3.selectAll("g").transition().duration(animDelay).delay((d,i) -> return animDelay*i).attr("transform", (d,i) -> "translate(#{indexScale(i)},300)")
