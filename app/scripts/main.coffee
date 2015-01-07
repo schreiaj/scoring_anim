@@ -27,9 +27,11 @@ stacks.append("text").text((d) -> d.score).attr("x", width/2)
 
 window.orderByScore = ->
   d3.selectAll("g").transition().duration(animDelay).delay((d,i) -> return animDelay*i).attr("transform", (d) -> "translate("+(scoreScale(d.score)+45*d.bins + 45*d.litter)+",300)")
-
+  d3.selectAll("text").text((d) -> d.score)
 window.orderByIndex = ->
   d3.selectAll("g").transition().duration(animDelay).delay((d,i) -> return animDelay*i).attr("transform", (d,i) -> "translate(#{indexScale(i)},300)")
+  d3.selectAll("text").text((d) -> d.score)
 
 window.orderByRatio = ->
   d3.selectAll("g").transition().duration(animDelay).delay((d,i) -> return animDelay*i).attr("transform", (d) -> "translate("+(ratioScale(d.score/(d.totes + d.bins + d.litter))+45*d.bins + 45*d.litter)+",300)")
+  d3.selectAll("text").text((d) -> Math.floor(d.ratio*10)/10.0)
